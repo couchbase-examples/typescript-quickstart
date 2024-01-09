@@ -1,10 +1,9 @@
 import * as couchbase from 'couchbase'
 
-const DB_USERNAME: string = 'Administrator'
-const DB_PASSWORD: string = 'Password123!'
-const DB_CONN_STR: string = 'localhost'
+const DB_USERNAME: string = process.env.DB_USERNAME || '';
+const DB_PASSWORD: string = process.env.DB_PASSWORD || '';
+const DB_CONN_STR: string = process.env.DB_CONN_STR || '';
 const DB_BUCKET_NAME: string | undefined = process.env.DB_BUCKET_NAME
-const IS_CAPELLA: string | undefined = process.env.IS_CAPELLA
 
 if (!DB_USERNAME) {
     throw new Error(
@@ -59,7 +58,6 @@ async function createCouchbaseCluster(): Promise<couchbase.Cluster> {
     if (cached.conn) {
         return cached.conn
     }
-
     const cluster = await couchbase.connect(DB_CONN_STR, {
         username: DB_USERNAME,
         password: DB_PASSWORD,
