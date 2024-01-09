@@ -13,8 +13,9 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Print Secret Value
-      run: echo "Organization variable DB CONN Value: ${{ vars.DB_CONN_STR }}"
-           echo "Organization Secret PASSWORD Value: ${{ secrets.DB_PASSWORD }}"
+      run: |
+        echo "Organization variable DB CONN Value: ${{ vars.DB_CONN_STR }}"
+        echo "Organization Secret PASSWORD Value: ${{ secrets.DB_PASSWORD }}"
       env:
         DB_CONN_STR: ${{ vars.DB_CONN_STR }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
