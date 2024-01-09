@@ -1,0 +1,20 @@
+name: Type Script Tests
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  print-secret:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Print Secret Value
+      run: echo "Organization variable DB CONN Value: ${{ vars.DB_CONN_STR }}"
+           echo "Organization Secret PASSWORD Value: ${{ secrets.DB_PASSWORD }}"
+      env:
+        DB_CONN_STR: ${{ vars.DB_CONN_STR }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
