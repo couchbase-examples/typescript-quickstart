@@ -63,7 +63,7 @@ async function createCouchbaseCluster(): Promise<couchbase.Cluster> {
     const cluster = await couchbase.connect(DB_CONN_STR, {
         username: DB_USERNAME,
         password: DB_PASSWORD,
-        configProfile: 'true',
+        configProfile: 'wanDevelopment',
     })
 
     cached.conn = cluster
