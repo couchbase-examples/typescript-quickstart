@@ -1,12 +1,12 @@
 name: Type Script Tests
 on:
-    push:
-        branches:
-            - main
-    # pull_request:
-    # workflow_dispatch:
-    # schedule:
-    #     - cron: '0 16 * * *'
+  push:
+    branches:
+      - main
+  # pull_request:
+  # workflow_dispatch:
+  # schedule:
+  #     - cron: '0 16 * * *'
 
 jobs:
   test:
