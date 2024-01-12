@@ -1,15 +1,8 @@
-import {
-    request,
-    describe,
-    test,
-    expect,
-    connectToDatabase,
-    app,
-} from './imports'
+import { request, describe, test, expect, getDatabase, app } from './imports'
 import { Airport } from '../src/models/airportModels'
 import { Route } from '../src/models/routeModels'
 afterAll(async () => {
-    const { cluster } = await connectToDatabase()
+    const { cluster } = await getDatabase()
     await cluster.close()
 })
 
@@ -30,8 +23,7 @@ describe('GET /api/v1/airport/routes', () => {
             destinationairport: 'Test Destination Airport',
         }
         beforeEach(async () => {
-            const { airportCollection, routeCollection } =
-                await connectToDatabase()
+            const { airportCollection, routeCollection } = await getDatabase()
 
             // Insert test data into the airport collection
             await airportCollection
@@ -67,8 +59,7 @@ describe('GET /api/v1/airport/routes', () => {
         })
 
         afterEach(async () => {
-            const { airportCollection, routeCollection } =
-                await connectToDatabase()
+            const { airportCollection, routeCollection } = await getDatabase()
 
             // Remove test data from the airport collection
             await airportCollection

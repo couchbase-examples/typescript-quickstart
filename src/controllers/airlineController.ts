@@ -1,17 +1,14 @@
 import { Airline } from '../models/airlineModels'
 import { Request, Response } from 'express'
 import { makeResponse } from '../shared/makeResponse'
-import { connectToDatabase } from '../../db/connection'
+import { getDatabase } from '../../db/connection'
+import { GetResult, QueryResult } from 'couchbase'
 
 const createAirline = async (req: Request, res: Response) => {
     let newAirline: Airline = {
-        icao: req.body.icao,
-        name: req.body.name,
-        country: req.body.country,
-        iata: req.body.iata,
-        callsign: req.body.callsign,
+        ...req.body,
     }
-    const { airlineCollection } = await connectToDatabase()
+    const { airlineCollection } = await getDatabase()
     await makeResponse(res, async () => {
         await airlineCollection.insert(req.params.id, newAirline)
         res.status(201)
@@ -21,9 +18,9 @@ const createAirline = async (req: Request, res: Response) => {
 
 const getAirline = async (req: Request, res: Response) => {
     let newAirline: Airline
-    const { airlineCollection } = await connectToDatabase()
+    const { airlineCollection } = await getDatabase()
     await makeResponse(res, async () => {
-        let getResult = await airlineCollection.get(req.params.id)
+        const getResult: GetResult = await airlineCollection.get(req.params.id)
         newAirline = getResult['content']
         return newAirline
     })
@@ -31,13 +28,9 @@ const getAirline = async (req: Request, res: Response) => {
 
 const updateAirline = async (req: Request, res: Response) => {
     let newAirline: Airline = {
-        callsign: req.body.callsign,
-        country: req.body.country,
-        iata: req.body.iata,
-        icao: req.body.icao,
-        name: req.body.name,
+        ...req.body,
     }
-    const { airlineCollection } = await connectToDatabase()
+    const { airlineCollection } = await getDatabase()
     await makeResponse(res, async () => {
         await airlineCollection.upsert(req.params.id, newAirline)
         return newAirline
@@ -45,7 +38,7 @@ const updateAirline = async (req: Request, res: Response) => {
 }
 
 const deleteAirline = async (req: Request, res: Response) => {
-    const { airlineCollection } = await connectToDatabase()
+    const { airlineCollection } = await getDatabase()
     await makeResponse(res, async () => {
         await airlineCollection.remove(req.params.id)
         res.status(204)
@@ -54,7 +47,7 @@ const deleteAirline = async (req: Request, res: Response) => {
 }
 
 const listAirlines = async (req: Request, res: Response) => {
-    const { scope } = await connectToDatabase()
+    const { scope } = await getDatabase()
     // Fetching parameters
     const country = (req.query.country as string) ?? ''
     let limit = parseInt(req.query.limit as string, 10) || 10
@@ -100,13 +93,13 @@ const listAirlines = async (req: Request, res: Response) => {
         options = { parameters: { LIMIT: limit, OFFSET: offset } }
     }
     await makeResponse(res, async () => {
-        let results = await scope.query(query, options)
+        const results: QueryResult = await scope.query(query, options)
         return results['rows']
     })
 }
 
 const listAirlinesToAirport = async (req: Request, res: Response) => {
-    const { scope } = await connectToDatabase()
+    const { scope } = await getDatabase()
     // Fetching parameters
     const airport = req.query.airport as string
     let limit = parseInt(req.query.limit as string, 10) || 10
@@ -139,7 +132,7 @@ const listAirlinesToAirport = async (req: Request, res: Response) => {
         `
     options = { parameters: { AIRPORT: airport, LIMIT: limit, OFFSET: offset } }
     await makeResponse(res, async () => {
-        let results = await scope.query(query, options)
+        const results: QueryResult = await scope.query(query, options)
         return results['rows']
     })
 }

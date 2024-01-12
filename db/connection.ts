@@ -1,9 +1,9 @@
 import * as couchbase from 'couchbase'
 
-const DB_USERNAME: string = process.env.DB_USERNAME || '';
-const DB_PASSWORD: string = process.env.DB_PASSWORD || '';
-const DB_CONN_STR: string = process.env.DB_CONN_STR || '';
-const DB_BUCKET_NAME: string | undefined = process.env.DB_BUCKET_NAME
+const DB_USERNAME: string = process.env.DB_USERNAME || ''
+const DB_PASSWORD: string = process.env.DB_PASSWORD || ''
+const DB_CONN_STR: string = process.env.DB_CONN_STR || ''
+const DB_BUCKET_NAME: string = process.env.DB_BUCKET_NAME || ''
 
 if (!DB_USERNAME) {
     throw new Error(
@@ -29,7 +29,6 @@ if (!DB_BUCKET_NAME) {
     )
 }
 
-
 interface DbConnection {
     cluster: couchbase.Cluster
     bucket: couchbase.Bucket
@@ -38,6 +37,8 @@ interface DbConnection {
     airportCollection: couchbase.Collection
     routeCollection: couchbase.Collection
 }
+
+let cachedDbConnection: DbConnection | null = null
 
 declare const global: {
     couchbase?: {
@@ -68,7 +69,7 @@ async function createCouchbaseCluster(): Promise<couchbase.Cluster> {
     return cluster
 }
 
-export async function connectToDatabase(): Promise<DbConnection> {
+async function connectToDatabase(): Promise<DbConnection> {
     const cluster = await createCouchbaseCluster()
     const bucket = cluster.bucket(DB_BUCKET_NAME!)
     const scope = bucket.scope('inventory')
@@ -84,6 +85,15 @@ export async function connectToDatabase(): Promise<DbConnection> {
         airportCollection,
         routeCollection,
     }
-
+    cachedDbConnection = dbConnection
     return dbConnection
+}
+
+export function getDatabase(): Promise<DbConnection> {
+    if (!cachedDbConnection) {
+        // If connection doesn't exist, create and cache it
+        return connectToDatabase()
+    }
+    // If connection exists, return it
+    return Promise.resolve(cachedDbConnection)
 }

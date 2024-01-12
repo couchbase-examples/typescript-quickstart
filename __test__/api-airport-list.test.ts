@@ -3,14 +3,14 @@ import {
     describe,
     test,
     expect, // supertest
-    connectToDatabase, // couchbase
+    getDatabase, // couchbase
     app, // REST application
 } from './imports'
 
 import { Airport } from '../src/models/airportModels'
 
 afterAll(async () => {
-    const { cluster } = await connectToDatabase()
+    const { cluster } = await getDatabase()
     await cluster.close()
 })
 
@@ -32,7 +32,7 @@ describe('GET /api/v1/airport/list', () => {
         }
 
         beforeEach(async () => {
-            const { airportCollection } = await connectToDatabase()
+            const { airportCollection } = await getDatabase()
             await airportCollection
                 .insert(id1, airport1)
                 .then(() => {
@@ -78,7 +78,7 @@ describe('GET /api/v1/airport/list', () => {
         })
 
         afterEach(async () => {
-            const { airportCollection } = await connectToDatabase()
+            const { airportCollection } = await getDatabase()
             await airportCollection
                 .remove(id1)
                 .then(() => {

@@ -3,6 +3,6 @@ import { describe, test, expect } from '@jest/globals'
 
 import { app } from '../src/app'
 
-import { connectToDatabase } from '../db/connection'
+import { getDatabase } from '../db/connection'
 
-export { request, describe, test, expect, connectToDatabase, app }
+export { request, describe, test, expect, getDatabase, app }

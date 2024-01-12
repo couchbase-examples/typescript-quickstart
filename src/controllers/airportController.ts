@@ -1,20 +1,14 @@
 import { Airport } from '../models/airportModels'
 import { Request, Response } from 'express'
 import { makeResponse } from '../shared/makeResponse'
-import { connectToDatabase } from '../../db/connection'
-import { string } from 'yaml/dist/schema/common/string'
+import { getDatabase } from '../../db/connection'
+import { GetResult, QueryResult } from 'couchbase'
 
 const createAirport = async (req: Request, res: Response) => {
     let newairport: Airport = {
-        airportname: req.body.airportname,
-        city: req.body.city,
-        country: req.body.country,
-        faa: req.body.faa,
-        geo: req.body.geo,
-        icao: req.body.icao,
-        tz: req.body.tz,
+        ...req.body,
     }
-    const { airportCollection } = await connectToDatabase()
+    const { airportCollection } = await getDatabase()
     await makeResponse(res, async () => {
         await airportCollection.insert(req.params.id, newairport)
         res.status(201)
@@ -24,9 +18,9 @@ const createAirport = async (req: Request, res: Response) => {
 
 const getAirport = async (req: Request, res: Response) => {
     let newairport: Airport
-    const { airportCollection } = await connectToDatabase()
+    const { airportCollection } = await getDatabase()
     await makeResponse(res, async () => {
-        let getResult = await airportCollection.get(req.params.id)
+        const getResult: GetResult = await airportCollection.get(req.params.id)
         newairport = getResult['content']
         return newairport
     })
@@ -34,15 +28,9 @@ const getAirport = async (req: Request, res: Response) => {
 
 const updateAirport = async (req: Request, res: Response) => {
     let newairport: Airport = {
-        airportname: req.body.airportname,
-        city: req.body.city,
-        country: req.body.country,
-        faa: req.body.faa,
-        geo: req.body.geo,
-        icao: req.body.icao,
-        tz: req.body.tz,
+        ...req.body,
     }
-    const { airportCollection } = await connectToDatabase()
+    const { airportCollection } = await getDatabase()
     await makeResponse(res, async () => {
         await airportCollection.upsert(req.params.id, newairport)
         return newairport
@@ -50,7 +38,7 @@ const updateAirport = async (req: Request, res: Response) => {
 }
 
 const deleteAirport = async (req: Request, res: Response) => {
-    const { airportCollection } = await connectToDatabase()
+    const { airportCollection } = await getDatabase()
     await makeResponse(res, async () => {
         await airportCollection.remove(req.params.id)
         res.status(204)
@@ -59,7 +47,7 @@ const deleteAirport = async (req: Request, res: Response) => {
 }
 
 const listAirport = async (req: Request, res: Response) => {
-    const { scope } = await connectToDatabase()
+    const { scope } = await getDatabase()
     // Fetching parameters
     const country = (req.query.country as string) ?? ''
     let limit = parseInt(req.query.limit as string, 10) || 10
@@ -109,13 +97,13 @@ const listAirport = async (req: Request, res: Response) => {
         options = { parameters: { LIMIT: limit, OFFSET: offset } }
     }
     await makeResponse(res, async () => {
-        let results = await scope.query(query, options)
+        let results: QueryResult = await scope.query(query, options)
         return results['rows']
     })
 }
 
 const ListDirectConnection = async (req: Request, res: Response) => {
-    const { scope } = await connectToDatabase()
+    const { scope } = await getDatabase()
     // Fetching parameters
     const airport = req.query.airport as string
     let limit = parseInt(req.query.limit as string, 10) || 10
@@ -140,7 +128,7 @@ const ListDirectConnection = async (req: Request, res: Response) => {
         `
     options = { parameters: { AIRPORT: airport, LIMIT: limit, OFFSET: offset } }
     await makeResponse(res, async () => {
-        let results = await scope.query(query, options)
+        let results: QueryResult = await scope.query(query, options)
         return results['rows']
     })
 }

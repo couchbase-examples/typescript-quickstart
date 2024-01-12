@@ -3,19 +3,19 @@ import {
     describe,
     test,
     expect, // supertest
-    connectToDatabase, // couchbase
+    getDatabase, // couchbase
     app, // REST application
 } from './imports'
 
 import { Airline } from '../src/models/airlineModels'
 
 afterAll(async () => {
-    const { cluster } = await connectToDatabase()
+    const { cluster } = await getDatabase()
     await cluster.close()
 })
 
 afterAll(async () => {
-    const { cluster } = await connectToDatabase()
+    const { cluster } = await getDatabase()
     await cluster.close()
 })
 
@@ -46,7 +46,7 @@ describe('POST /api/v1/airline/{id}', () => {
         })
 
         afterEach(async () => {
-            const { airlineCollection } = await connectToDatabase()
+            const { airlineCollection } = await getDatabase()
             await airlineCollection
                 .remove(id)
                 .then(() => {
