@@ -53,7 +53,9 @@ Specifically, you need to do the following:
 - Create the [database credentials](https://docs.couchbase.com/cloud/clusters/manage-database-users.html) to access the travel-sample bucket (Read and Write) used in the application.
 - [Allow access](https://docs.couchbase.com/cloud/clusters/allow-ip-address.html) to the Cluster from the IP on which the application is running.
 
-All configuration for communication with the database is read from the environment variables. We have provided a convenience feature in this quickstart to read the environment variables from a local file, `dev.env` in the `config` folder.
+All configuration for communication with the database is read from the environment variables. We have provided a convenience feature in this quickstart to read the environment variables from a local file, `config/dev.env.example`.
+
+Create a copy of `dev.env.example` file and rename it to `dev.env` and add the values for the Couchbase connection.
 
 ```sh
 DB_CONN_STR=<connection_string>
@@ -107,6 +109,8 @@ The application will run on port 3000 of your local machine (http://localhost:30
 
 ## Running The Tests
 
+Create a copy of `config/test.env.example` file and rename it to `config/test.env` and add the values for the Couchbase connection.
+
 To run the integration tests, use the following commands:
 
 ```sh
@@ -126,7 +130,7 @@ For this quickstart, we use three collections, `airport`, `airline` and `routes`
 If you would like to add another entity to the APIs, these are the steps to follow:
 
 - **Create the New Entity in Couchbase Bucket:**
-  - Utilize the [Couchbase Server interface](https://docs.couchbase.com/cloud/n1ql/n1ql-language-reference/createcollection.html) to establish the new collection within the Couchbase bucket.
+  - Utilize the [Couchbase Server interface](https://docs.couchbase.com/cloud/n1ql/n1ql-language-reference/createcollection.html) to establish the new collection within the Couchbase bucket. Alternatively the collection can be created using the [createCollection](https://docs.couchbase.com/sdk-api/couchbase-node-client/classes/CollectionManager.html#createCollection) via the SDK.
 
 - **Define the New Route:**
   - Navigate to the `src/routes` folder and create the new route.
