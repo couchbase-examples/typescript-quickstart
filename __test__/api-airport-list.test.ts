@@ -55,7 +55,7 @@ describe('GET /api/v1/airport/list', () => {
                 .get(`/api/v1/airport/list`)
                 .query({
                     offset: 0,
-                    limit: 5,
+                    limit: 15,
                     country: 'Test Country',
                 })
             expect(response.statusCode).toBe(200)
