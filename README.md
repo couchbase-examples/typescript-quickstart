@@ -39,7 +39,7 @@ git clone https://github.com/couchbase-examples/typescript-quickstart.git
 Any dependencies will be installed by running the npm install command, which installs any dependencies required for the project.
 
 ```sh
-# Execute this command in the project's root directory
+# Execute this command in the project's root directory which is `typescript-quickstart`
 npm install
 ```
 
