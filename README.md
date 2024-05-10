@@ -25,11 +25,13 @@ To run this prebuilt project, you will need:
 
 ## Similar Quickstart Repositories
 
-If you are looking for a quickstart using Node.js, you can find it in this [repo](https://github.com/couchbase-examples/nodejs-quickstart.git)
+This quickstart examples demonstrates creating REST API using NodeJS, however,  quickstart is also available in following flavors and variants of javascript:
 
-If you are looking for a quickstart using Ottoman.js, you can find it in this [repo](https://github.com/couchbase-examples/ottomanjs-quickstart)
+[Node.js REST API quickstart](https://github.com/couchbase-examples/nodejs-quickstart.git)
 
-If you are looking for a quickstart using Next.js, you can find it in this [repo](https://github.com/couchbase-examples/nextjs-capella-quickstart)
+[Next.js REST API quickstart](https://github.com/couchbase-examples/nextjs-capella-quickstart)
+
+[Ottoman quickstart](https://github.com/couchbase-examples/ottomanjs-quickstart) (Couchbase node based ODM - learn more [Ottoman](https://ottomanjs.com/) here)
 
 ## App Setup
 
