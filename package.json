@@ -16,7 +16,7 @@
         "@babel/core": "^7.21.8",
         "@babel/node": "^7.20.7",
         "@babel/plugin-transform-runtime": "^7.21.0",
-        "@babel/preset-env": "^7.20.2",
+        "@babel/preset-env": "^7.26.0",
         "@jest/globals": "^29.7.0",
         "@types/cors": "^2.8.17",
         "@types/couchbase": "^2.4.9",
