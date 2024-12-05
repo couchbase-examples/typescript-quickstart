@@ -36,7 +36,7 @@
     "dependencies": {
         "cors": "^2.8.5",
         "couchbase": "4.2.8",
-        "express": "^4.18.2",
+        "express": "^4.21.1",
         "swagger-ui-express": "^4.6.2",
         "yaml": "^2.3.4"
     }
