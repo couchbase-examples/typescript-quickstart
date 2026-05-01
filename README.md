@@ -17,7 +17,7 @@ To run this prebuilt project, you will need:
 
 -   [Couchbase Capella](https://www.couchbase.com/products/capella/) cluster with [travel-sample](https://docs.couchbase.com/nodejs-sdk/current/ref/travel-app-data-model.html) bucket loaded.
     -   To run this tutorial using a self managed Couchbase cluster, please refer to the [appendix](#running-self-managed-couchbase-cluster).
--   [LTS Node.js Version](https://nodejs.org/en/download) installed on local machine.
+-   [Active LTS Node.js 24](https://nodejs.org/en/download) installed on local machine.
 -   Basic knowledge of [JavaScript](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics), [TypeScript](https://www.typescriptlang.org/) and [Express](https://expressjs.com/)
 -   Loading Travel Sample Bucket
     If travel-sample is not loaded in your Capella cluster, you can load it by following the instructions for your Capella Cluster:
@@ -45,7 +45,7 @@ git clone https://github.com/couchbase-examples/typescript-quickstart.git
 
 ## Install Dependencies
 
-Any dependencies will be installed by running the npm install command, which installs any dependencies required for the project.
+Any dependencies will be installed by running the npm install command, which installs any dependencies required for the project. This quickstart is currently verified on Active LTS Node.js 24.
 
 ```sh
 # Execute this command in the project's root directory which is `typescript-quickstart`
