@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as a base image
-FROM --platform=linux/amd64 node:24
+FROM node:24
 
 RUN apt-get update && \
     apt-get install -y openssl
