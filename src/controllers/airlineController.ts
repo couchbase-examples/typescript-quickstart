@@ -2,7 +2,7 @@ import { Airline } from '../models/airlineModels'
 import { Request, Response } from 'express'
 import { makeResponse } from '../shared/makeResponse'
 import { getDatabase } from '../../db/connection'
-import { GetResult, QueryResult } from 'couchbase'
+import { GetResult, QueryResult, QueryScanConsistency } from 'couchbase'
 
 const createAirline = async (req: Request, res: Response) => {
     let newAirline: Airline = {
@@ -59,6 +59,7 @@ const listAirlines = async (req: Request, res: Response) => {
             LIMIT: number
             OFFSET: number
         }
+        scanConsistency: QueryScanConsistency
     }
     let options: QueryOptions
     if (country !== '') {
@@ -76,6 +77,7 @@ const listAirlines = async (req: Request, res: Response) => {
         `
         options = {
             parameters: { COUNTRY: country, LIMIT: limit, OFFSET: offset },
+            scanConsistency: QueryScanConsistency.RequestPlus,
         }
     } else {
         query = `
@@ -90,7 +92,10 @@ const listAirlines = async (req: Request, res: Response) => {
           OFFSET $OFFSET;
         `
 
-        options = { parameters: { LIMIT: limit, OFFSET: offset } }
+        options = {
+            parameters: { LIMIT: limit, OFFSET: offset },
+            scanConsistency: QueryScanConsistency.RequestPlus,
+        }
     }
     await makeResponse(res, async () => {
         const results: QueryResult = await scope.query(query, options)
@@ -111,6 +116,7 @@ const listAirlinesToAirport = async (req: Request, res: Response) => {
             LIMIT: number
             OFFSET: number
         }
+        scanConsistency: QueryScanConsistency
     }
     let options: QueryOptions
     query = `
@@ -130,7 +136,10 @@ const listAirlinesToAirport = async (req: Request, res: Response) => {
           LIMIT $LIMIT
           OFFSET $OFFSET;
         `
-    options = { parameters: { AIRPORT: airport, LIMIT: limit, OFFSET: offset } }
+    options = {
+        parameters: { AIRPORT: airport, LIMIT: limit, OFFSET: offset },
+        scanConsistency: QueryScanConsistency.RequestPlus,
+    }
     await makeResponse(res, async () => {
         const results: QueryResult = await scope.query(query, options)
         return results['rows']
