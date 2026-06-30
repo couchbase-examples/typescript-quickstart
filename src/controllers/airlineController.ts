@@ -2,7 +2,7 @@ import { Airline } from '../models/airlineModels'
 import { Request, Response } from 'express'
 import { makeResponse } from '../shared/makeResponse'
 import { getDatabase } from '../../db/connection'
-import { GetResult, QueryResult, QueryScanConsistency } from 'couchbase'
+import { GetResult, QueryOptions, QueryResult, QueryScanConsistency } from 'couchbase'
 
 const createAirline = async (req: Request, res: Response) => {
     let newAirline: Airline = {
@@ -53,14 +53,6 @@ const listAirlines = async (req: Request, res: Response) => {
     let limit = parseInt(req.query.limit as string, 10) || 10
     let offset = parseInt(req.query.offset as string, 10) || 0
     let query: string
-    type QueryOptions = {
-        parameters: {
-            COUNTRY?: string
-            LIMIT: number
-            OFFSET: number
-        }
-        scanConsistency: QueryScanConsistency
-    }
     let options: QueryOptions
     if (country !== '') {
         query = `
@@ -110,14 +102,6 @@ const listAirlinesToAirport = async (req: Request, res: Response) => {
     let limit = parseInt(req.query.limit as string, 10) || 10
     let offset = parseInt(req.query.offset as string, 10) || 0
     let query: string
-    type QueryOptions = {
-        parameters: {
-            AIRPORT?: string
-            LIMIT: number
-            OFFSET: number
-        }
-        scanConsistency: QueryScanConsistency
-    }
     let options: QueryOptions
     query = `
           SELECT air.callsign,
