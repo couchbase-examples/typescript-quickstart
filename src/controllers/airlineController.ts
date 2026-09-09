@@ -2,7 +2,7 @@ import { Airline } from '../models/airlineModels'
 import { Request, Response } from 'express'
 import { makeResponse } from '../shared/makeResponse'
 import { getDatabase } from '../../db/connection'
-import { GetResult, QueryResult } from 'couchbase'
+import { GetResult, QueryOptions, QueryResult, QueryScanConsistency } from 'couchbase'
 
 const createAirline = async (req: Request, res: Response) => {
     let newAirline: Airline = {
@@ -53,13 +53,6 @@ const listAirlines = async (req: Request, res: Response) => {
     let limit = parseInt(req.query.limit as string, 10) || 10
     let offset = parseInt(req.query.offset as string, 10) || 0
     let query: string
-    type QueryOptions = {
-        parameters: {
-            COUNTRY?: string
-            LIMIT: number
-            OFFSET: number
-        }
-    }
     let options: QueryOptions
     if (country !== '') {
         query = `
@@ -76,6 +69,7 @@ const listAirlines = async (req: Request, res: Response) => {
         `
         options = {
             parameters: { COUNTRY: country, LIMIT: limit, OFFSET: offset },
+            scanConsistency: QueryScanConsistency.RequestPlus,
         }
     } else {
         query = `
@@ -90,7 +84,10 @@ const listAirlines = async (req: Request, res: Response) => {
           OFFSET $OFFSET;
         `
 
-        options = { parameters: { LIMIT: limit, OFFSET: offset } }
+        options = {
+            parameters: { LIMIT: limit, OFFSET: offset },
+            scanConsistency: QueryScanConsistency.RequestPlus,
+        }
     }
     await makeResponse(res, async () => {
         const results: QueryResult = await scope.query(query, options)
@@ -105,13 +102,6 @@ const listAirlinesToAirport = async (req: Request, res: Response) => {
     let limit = parseInt(req.query.limit as string, 10) || 10
     let offset = parseInt(req.query.offset as string, 10) || 0
     let query: string
-    type QueryOptions = {
-        parameters: {
-            AIRPORT?: string
-            LIMIT: number
-            OFFSET: number
-        }
-    }
     let options: QueryOptions
     query = `
           SELECT air.callsign,
@@ -130,7 +120,10 @@ const listAirlinesToAirport = async (req: Request, res: Response) => {
           LIMIT $LIMIT
           OFFSET $OFFSET;
         `
-    options = { parameters: { AIRPORT: airport, LIMIT: limit, OFFSET: offset } }
+    options = {
+        parameters: { AIRPORT: airport, LIMIT: limit, OFFSET: offset },
+        scanConsistency: QueryScanConsistency.RequestPlus,
+    }
     await makeResponse(res, async () => {
         const results: QueryResult = await scope.query(query, options)
         return results['rows']
