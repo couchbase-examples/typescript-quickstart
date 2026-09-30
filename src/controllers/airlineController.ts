@@ -4,7 +4,7 @@ import { makeResponse } from '../shared/makeResponse'
 import { getDatabase } from '../../db/connection'
 import { GetResult, QueryOptions, QueryResult, QueryScanConsistency } from 'couchbase'
 
-const createAirline = async (req: Request, res: Response) => {
+const createAirline = async (req: Request<{ id: string }>, res: Response) => {
     let newAirline: Airline = {
         ...req.body,
     }
@@ -16,7 +16,7 @@ const createAirline = async (req: Request, res: Response) => {
     })
 }
 
-const getAirline = async (req: Request, res: Response) => {
+const getAirline = async (req: Request<{ id: string }>, res: Response) => {
     let newAirline: Airline
     const { airlineCollection } = await getDatabase()
     await makeResponse(res, async () => {
@@ -26,7 +26,7 @@ const getAirline = async (req: Request, res: Response) => {
     })
 }
 
-const updateAirline = async (req: Request, res: Response) => {
+const updateAirline = async (req: Request<{ id: string }>, res: Response) => {
     let newAirline: Airline = {
         ...req.body,
     }
@@ -37,7 +37,7 @@ const updateAirline = async (req: Request, res: Response) => {
     })
 }
 
-const deleteAirline = async (req: Request, res: Response) => {
+const deleteAirline = async (req: Request<{ id: string }>, res: Response) => {
     const { airlineCollection } = await getDatabase()
     await makeResponse(res, async () => {
         await airlineCollection.remove(req.params.id)

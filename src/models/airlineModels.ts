@@ -7,4 +7,4 @@ type Airline = {
     name: string
 }
 
-export { Airline }
+export type { Airline }
