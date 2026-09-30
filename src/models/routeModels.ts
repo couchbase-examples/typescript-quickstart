@@ -17,4 +17,4 @@ type Route = {
     distance?: number
 }
 
-export { Route }
+export type { Route }

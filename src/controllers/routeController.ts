@@ -4,7 +4,7 @@ import { makeResponse } from '../shared/makeResponse'
 import { getDatabase } from '../../db/connection'
 import { GetResult } from 'couchbase'
 
-const createRoute = async (req: Request, res: Response) => {
+const createRoute = async (req: Request<{ id: string }>, res: Response) => {
     const newroute: Route = { ...req.body }
     const { routeCollection } = await getDatabase()
     await makeResponse(res, async () => {
@@ -14,7 +14,7 @@ const createRoute = async (req: Request, res: Response) => {
     })
 }
 
-const getRoute = async (req: Request, res: Response) => {
+const getRoute = async (req: Request<{ id: string }>, res: Response) => {
     let newroute: Route
     const { routeCollection } = await getDatabase()
     await makeResponse(res, async () => {
@@ -24,7 +24,7 @@ const getRoute = async (req: Request, res: Response) => {
     })
 }
 
-const updateRoute = async (req: Request, res: Response) => {
+const updateRoute = async (req: Request<{ id: string }>, res: Response) => {
     const updatedRoute: Route = {
         ...req.body,
     }
@@ -35,7 +35,7 @@ const updateRoute = async (req: Request, res: Response) => {
     })
 }
 
-const deleteRoute = async (req: Request, res: Response) => {
+const deleteRoute = async (req: Request<{ id: string }>, res: Response) => {
     const { routeCollection } = await getDatabase()
     await makeResponse(res, async () => {
         await routeCollection.remove(req.params.id)

@@ -16,4 +16,4 @@ type Airport = {
     tz?: string
 }
 
-export { Airport }
+export type { Airport }

@@ -4,7 +4,7 @@ import { makeResponse } from '../shared/makeResponse'
 import { getDatabase } from '../../db/connection'
 import { GetResult, QueryOptions, QueryResult, QueryScanConsistency } from 'couchbase'
 
-const createAirport = async (req: Request, res: Response) => {
+const createAirport = async (req: Request<{ id: string }>, res: Response) => {
     let newairport: Airport = {
         ...req.body,
     }
@@ -16,7 +16,7 @@ const createAirport = async (req: Request, res: Response) => {
     })
 }
 
-const getAirport = async (req: Request, res: Response) => {
+const getAirport = async (req: Request<{ id: string }>, res: Response) => {
     let newairport: Airport
     const { airportCollection } = await getDatabase()
     await makeResponse(res, async () => {
@@ -26,7 +26,7 @@ const getAirport = async (req: Request, res: Response) => {
     })
 }
 
-const updateAirport = async (req: Request, res: Response) => {
+const updateAirport = async (req: Request<{ id: string }>, res: Response) => {
     let newairport: Airport = {
         ...req.body,
     }
@@ -37,7 +37,7 @@ const updateAirport = async (req: Request, res: Response) => {
     })
 }
 
-const deleteAirport = async (req: Request, res: Response) => {
+const deleteAirport = async (req: Request<{ id: string }>, res: Response) => {
     const { airportCollection } = await getDatabase()
     await makeResponse(res, async () => {
         await airportCollection.remove(req.params.id)

@@ -35,7 +35,7 @@ app.use('/api/v1/airline', airlineRoutes)
 app.use('/api/v1/airport', airportRoutes)
 app.use('/api/v1/route', routeRoutes)
 
-app.get('*', (req, res) => {
+app.get('/{*splat}', (req, res) => {
     console.log(`Received request for: ${req.originalUrl}`)
     res.status(404).send('Not Found')
 })
